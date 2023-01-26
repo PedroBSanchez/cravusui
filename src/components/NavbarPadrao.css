@@ -1,0 +1,10 @@
+.navbar-link-ok {
+  color: white;
+  cursor: pointer;
+  font-family: "consolas";
+  font-size: 20px;
+}
+
+.navbar-link-ok:hover {
+  color: gray;
+}
