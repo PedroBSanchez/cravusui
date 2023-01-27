@@ -5,14 +5,13 @@ import { BiSearchAlt } from "react-icons/bi";
 import NavbarPadrao from "../components/NavbarPadrao";
 import TablePadrao from "../components/TablePadrao";
 import "./Produtos.css";
+import ModalCadastro from "../components/ModalCadastro";
 
 const Produtos = () => {
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
   const [items, setItems] = useState([]);
-
-  //Implementar método de registar novo item
-  //Implementar método para pegar RECEBE como parâmetro a página items paginados e passar para tabela
-  //
+  const [modalCadastroShow, setModalCadastroShow] = useState(false);
 
   useEffect(() => {
     getItems();
@@ -31,7 +30,6 @@ const Produtos = () => {
         }
       )
       .then((response) => {
-        console.log(response.data);
         setItems(response.data);
       })
       .catch((error) => {
@@ -48,7 +46,11 @@ const Produtos = () => {
             <h1 className="page-title">Produtos</h1>
           </div>
           <div className="col-1">
-            <button type="button" className="btn btn-success">
+            <button
+              type="button"
+              className="btn btn-success"
+              onClick={() => setModalCadastroShow(true)}
+            >
               Cadastrar
             </button>
           </div>
@@ -83,10 +85,17 @@ const Produtos = () => {
               items={items}
               setItems={setItems}
               getItems={getItems}
+              search={search}
+              page={page}
             />
           </div>
         </div>
       </div>
+      <ModalCadastro
+        show={modalCadastroShow}
+        onHide={() => setModalCadastroShow(false)}
+        getItems={getItems}
+      />
     </>
   );
 };
