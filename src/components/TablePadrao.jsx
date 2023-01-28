@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import swal from "sweetalert";
+import Pagination from "react-bootstrap/Pagination";
 
 import { FaTrashAlt, FaPencilAlt } from "react-icons/fa";
 
 import "./TablePadrao.css";
 import ModalEditItem from "./ModalEditItem";
 
-const TablePadrao = ({ items, setItems, getItems, search, page }) => {
+const TablePadrao = ({ items, setItems, getItems, search }) => {
   const token = localStorage.getItem("tokenApi");
 
   const [modalEditShow, setModalEditshow] = useState(false);
@@ -15,6 +16,25 @@ const TablePadrao = ({ items, setItems, getItems, search, page }) => {
   const [valuePlaceholder, setValuePlaceholder] = useState("");
   const [amountPlaceholder, setAmountPlaceholder] = useState("");
   const [idEdit, setIdEdit] = useState();
+  const [pageActive, setPageActive] = useState(1);
+
+  let page = 1;
+
+  let amountPages = [];
+
+  for (let number = 1; number <= items.totalPages; number++) {
+    amountPages.push(
+      <Pagination.Item
+        key={number}
+        active={number === pageActive}
+        onClick={() => {
+          handlePageChange(number);
+        }}
+      >
+        {number}
+      </Pagination.Item>
+    );
+  }
 
   const handleDeleteItem = async (itemId) => {
     await axios
@@ -41,6 +61,13 @@ const TablePadrao = ({ items, setItems, getItems, search, page }) => {
           timer: 2500,
         });
       });
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setPageActive(pageNumber);
+    page = pageNumber;
+    console.log(page);
+    getItems(search, page);
   };
 
   return (
@@ -97,6 +124,12 @@ const TablePadrao = ({ items, setItems, getItems, search, page }) => {
               })}
           </tbody>
         </table>
+
+        <div className="row mt-2 text-center justify-content-center">
+          <div className="col-1">
+            <Pagination>{amountPages}</Pagination>
+          </div>
+        </div>
       </div>
       <ModalEditItem
         onHide={() => setModalEditshow(false)}
@@ -107,6 +140,8 @@ const TablePadrao = ({ items, setItems, getItems, search, page }) => {
         idEdit={idEdit}
         setIdEdit={setIdEdit}
         getItems={getItems}
+        currentPage={page}
+        currentSearch={search}
       />
     </>
   );

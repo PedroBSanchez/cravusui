@@ -46,7 +46,8 @@ const ModalEditItem = (props) => {
           showConfirmButton: false,
           timer: 2500,
         });
-        await props.getItems();
+        console.log(props.currentPage);
+        await props.getItems(props.currentSearch, props.currentPage);
         props.setIdEdit(null);
         props.onHide();
         return;

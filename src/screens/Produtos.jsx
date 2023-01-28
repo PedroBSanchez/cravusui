@@ -9,7 +9,7 @@ import ModalCadastro from "../components/ModalCadastro";
 
 const Produtos = () => {
   const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
+
   const [items, setItems] = useState([]);
   const [modalCadastroShow, setModalCadastroShow] = useState(false);
 
@@ -86,7 +86,6 @@ const Produtos = () => {
               setItems={setItems}
               getItems={getItems}
               search={search}
-              page={page}
             />
           </div>
         </div>
