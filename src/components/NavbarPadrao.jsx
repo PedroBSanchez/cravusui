@@ -5,7 +5,10 @@ import "./NavbarPadrao.css";
 import { useNavigate } from "react-router-dom";
 function NavbarPadrao() {
   const navigate = useNavigate();
-  const handleNavigate = () => {};
+
+  const handleNavigate = (pageUrl) => {
+    navigate(`/${pageUrl}`);
+  };
 
   return (
     <nav className="navbar navbar-expand-lg bg-dark">
@@ -19,8 +22,25 @@ function NavbarPadrao() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <a className="nav-link navbar-link-ok" style={{ color: "white" }}>
+              <a
+                className="nav-link navbar-link-ok"
+                style={{ color: "white" }}
+                onClick={() => {
+                  handleNavigate("produtos");
+                }}
+              >
                 Produtos
+              </a>
+            </li>
+            <li className="nav-item">
+              <a
+                className="nav-link navbar-link-ok"
+                style={{ color: "white" }}
+                onClick={() => {
+                  handleNavigate("pedidos");
+                }}
+              >
+                Pedidos
               </a>
             </li>
           </ul>

@@ -23,6 +23,9 @@ const TablePadrao = ({ items, setItems, getItems, search }) => {
   let amountPages = [];
 
   for (let number = 1; number <= items.totalPages; number++) {
+    if (number === pageActive) {
+      page = pageActive;
+    }
     amountPages.push(
       <Pagination.Item
         key={number}

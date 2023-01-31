@@ -10,7 +10,6 @@ const ModalEditItem = (props) => {
   const [newValue, setNewValue] = useState("");
   const [newAmount, setNewAmount] = useState("");
 
-  console.log(props.idEdit);
   const handleEditItem = async () => {
     const descriptionEdit =
       newDescription && newDescription != ""
