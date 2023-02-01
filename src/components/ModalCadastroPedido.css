@@ -1,0 +1,10 @@
+.add-item-icon {
+  cursor: pointer;
+  transition: 1s;
+  color: green;
+}
+
+.add-item-icon:hover {
+  color: rgb(0, 241, 60);
+  transition: 1s;
+}

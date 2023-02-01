@@ -1,9 +1,5 @@
-.page-title {
-  font-size: 32px;
-  font-family: "Consolas";
-}
-
 .table-container {
   border: 2px solid gray;
   border-radius: 10px;
+  background-color: rgb(255, 243, 205);
 }
