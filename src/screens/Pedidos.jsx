@@ -4,16 +4,40 @@ import { BiSearchAlt } from "react-icons/bi";
 
 import "./Pedidos.css";
 import ModalCadastroPedido from "../components/ModalCadastroPedido";
+import axios from "axios";
+import TableOrders from "../components/TableOrders";
 
 const Pedidos = () => {
   const [modalCadastroShow, setModalCadastroShow] = useState(false);
 
-  const [citySearch, setCitySearch] = useState();
-  const [clientSearch, setClientSearch] = useState();
+  const [citySearch, setCitySearch] = useState("");
+  const [clientSearch, setClientSearch] = useState("");
 
   const [orders, setOrders] = useState([]);
 
-  const getOrders = async () => {};
+  useEffect(() => {
+    getOrders();
+  }, []);
+
+  const getOrders = async (pageParam = 1) => {
+    const token = localStorage.getItem("tokenApi");
+
+    await axios
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/api/orders/paginate/?page=${pageParam}&city=${citySearch}&client=${clientSearch}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        setOrders(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -56,6 +80,15 @@ const Pedidos = () => {
               size={30}
               style={{ cursor: "pointer" }}
               onClick={getOrders}
+            />
+          </div>
+        </div>
+        <div className="row mt-2">
+          <div className="offset-1 col-10">
+            <TableOrders
+              orders={orders}
+              setOrders={setOrders}
+              getOrders={getOrders}
             />
           </div>
         </div>

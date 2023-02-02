@@ -4,7 +4,7 @@ import { FaTrashAlt } from "react-icons/fa";
 
 import "./TableOrderItems.css";
 
-const TableOrderItems = ({ orderItems }) => {
+const TableOrderItems = ({ orderItems, handleRemoveItem }) => {
   return (
     <div className="table-container p-2">
       <table
@@ -24,7 +24,6 @@ const TableOrderItems = ({ orderItems }) => {
         <tbody>
           {orderItems &&
             orderItems.map((item, index) => {
-              console.log(item);
               return (
                 <tr key={index}>
                   <th scope="row">{index + 1}</th>
@@ -38,7 +37,9 @@ const TableOrderItems = ({ orderItems }) => {
                     <FaTrashAlt
                       color="#eb6767"
                       style={{ cursor: "pointer" }}
-                      onClick={() => {}}
+                      onClick={() => {
+                        handleRemoveItem(index);
+                      }}
                     />
                   </th>
                 </tr>

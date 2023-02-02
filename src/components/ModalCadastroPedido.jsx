@@ -38,7 +38,7 @@ const ModalCadastroPedido = (props) => {
         },
       })
       .then((response) => {
-        setNewItems(response.data);
+        setAllItems(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -103,7 +103,20 @@ const ModalCadastroPedido = (props) => {
     document.getElementById("produtoInput").value = null;
     document.getElementById("quantidadeInput").value = null;
 
-    setOrderPrice(orderPrice + newItemValue);
+    setOrderPrice(orderPrice + newItemValue * newItemAmount);
+  };
+
+  const handleRemoveItem = (index) => {
+    //slice(index, 1)
+
+    setOrderPrice(
+      orderPrice - newItems[index].value * parseInt(newItems[index].amount)
+    );
+    let arrayRemoveItem = newItems;
+
+    arrayRemoveItem.splice(index, 1);
+
+    setNewItems(arrayRemoveItem);
   };
 
   const handleOptionNewItem = (val) => {
@@ -135,7 +148,71 @@ const ModalCadastroPedido = (props) => {
     }
   };
 
-  const handleNewOrder = async () => {};
+  const handleNewOrder = async () => {
+    const token = localStorage.getItem("tokenApi");
+
+    const arrayItems = [];
+
+    newItems.forEach((element) => {
+      arrayItems.push({ code: element.code, amount: parseInt(element.amount) });
+    });
+
+    const options = {
+      url: `${process.env.REACT_APP_BASE_URL}/api/orders/create`,
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      data: {
+        city: newCity,
+        client: newClient,
+        items: arrayItems,
+      },
+    };
+
+    await axios
+      .request(options)
+      .then((response) => {
+        //Zerar valores
+        zerarInputs();
+        props.onHide();
+        return swal({
+          icon: "success",
+          title: "Pedido criado com sucesso",
+          showConfirmButton: false,
+          timer: 2500,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        zerarInputs();
+        props.onHide();
+        return swal({
+          icon: "error",
+          title: "Falha ao criar pedido",
+          showConfirmButton: false,
+          timer: 2500,
+        });
+      });
+  };
+
+  const zerarInputs = () => {
+    setNewCity(null);
+    setNewClient(null);
+    setNewItems([]);
+    setOrderPrice(0);
+
+    setNewItemAmount(null);
+    setNewItemCode(null);
+    setNewItemDescription(null);
+    setNewItemValue(null);
+
+    document.getElementById("cidadeInput").value = null;
+    document.getElementById("clienteInput").value = null;
+    document.getElementById("produtoInput").value = null;
+    document.getElementById("quantidadeInput").value = null;
+  };
 
   return (
     <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter">
@@ -183,9 +260,9 @@ const ModalCadastroPedido = (props) => {
             />
             <datalist id="data" style={{ width: "100%" }}>
               {allItems.length > 0 &&
-                allItems.map((item) => {
+                allItems.map((item, index) => {
                   return (
-                    <option>
+                    <option key={index}>
                       {item.code} - {item.description} - R${item.value}
                     </option>
                   );
@@ -216,7 +293,10 @@ const ModalCadastroPedido = (props) => {
             Itens do Pedido
           </Modal.Title>
           <div className="col">
-            <TableOrderItems orderItems={newItems} />
+            <TableOrderItems
+              orderItems={newItems}
+              handleRemoveItem={handleRemoveItem}
+            />
           </div>
         </div>
         <div className="row mt-2">
