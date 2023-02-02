@@ -4,10 +4,16 @@ import swal from "sweetalert";
 import Pagination from "react-bootstrap/Pagination";
 
 import { FaTrashAlt, FaPencilAlt } from "react-icons/fa";
+import { BiSearchAlt } from "react-icons/bi";
 
 import "./TableOrders.css";
+import ModalOrderInfo from "./ModalOrderInfo";
 
 const TableOrders = ({ orders, setOrders, getOrders }) => {
+  const [modalInfoShow, setModalInfoShow] = useState(false);
+
+  const [orderInfo, setOrderInfo] = useState({});
+
   const [pageActive, setPageActive] = useState(1);
 
   let page = 1;
@@ -76,6 +82,11 @@ const TableOrders = ({ orders, setOrders, getOrders }) => {
     });
   };
 
+  const handleOpenModalInfo = (order) => {
+    setOrderInfo(order);
+    setModalInfoShow(true);
+  };
+
   return (
     <>
       <div className="table-container p-2">
@@ -106,9 +117,11 @@ const TableOrders = ({ orders, setOrders, getOrders }) => {
                     <th>{order.seller.name}</th>
                     <th>R${order.total.toFixed(2)}</th>
                     <th>
-                      <FaPencilAlt
+                      <BiSearchAlt
                         style={{ cursor: "pointer" }}
-                        onClick={() => {}}
+                        onClick={() => {
+                          handleOpenModalInfo(order);
+                        }}
                       />{" "}
                       <FaTrashAlt
                         color="#eb6767"
@@ -130,6 +143,13 @@ const TableOrders = ({ orders, setOrders, getOrders }) => {
           </div>
         </div>
       </div>
+      <ModalOrderInfo
+        show={modalInfoShow}
+        onHide={() => {
+          setModalInfoShow(false);
+        }}
+        order={orderInfo}
+      />
     </>
   );
 };
