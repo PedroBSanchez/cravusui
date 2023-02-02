@@ -153,6 +153,21 @@ const ModalCadastroPedido = (props) => {
 
     const arrayItems = [];
 
+    if (
+      newCity == null ||
+      newCity == "" ||
+      newClient == null ||
+      newClient == "" ||
+      newItems.length <= 0
+    ) {
+      return swal({
+        icon: "error",
+        title: "Campos obrigatórios",
+        showConfirmButton: false,
+        timer: 2500,
+      });
+    }
+
     newItems.forEach((element) => {
       arrayItems.push({ code: element.code, amount: parseInt(element.amount) });
     });
