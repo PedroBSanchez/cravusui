@@ -1,6 +1,7 @@
 import React from "react";
 
 import { FaTrashAlt } from "react-icons/fa";
+import { numberToReal } from "../utils/numberToReal";
 
 import "./TableOrderItems.css";
 
@@ -31,7 +32,7 @@ const TableOrderItems = ({ orderItems, handleRemoveItem }) => {
                   <th>
                     <u>{item.code}</u>
                   </th>
-                  <th>R${item.value.toFixed(2)}</th>
+                  <th>{numberToReal(item.value)}</th>
                   <th>{item.amount}</th>
                   <th>
                     <FaTrashAlt

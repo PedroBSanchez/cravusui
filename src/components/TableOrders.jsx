@@ -8,8 +8,12 @@ import { BiSearchAlt } from "react-icons/bi";
 
 import "./TableOrders.css";
 import ModalOrderInfo from "./ModalOrderInfo";
+import ModalLoading from "./ModalLoading";
+import { numberToReal } from "../utils/numberToReal";
 
 const TableOrders = ({ orders, setOrders, getOrders }) => {
+  const [loading, setLoading] = useState(false);
+
   const [modalInfoShow, setModalInfoShow] = useState(false);
 
   const [orderInfo, setOrderInfo] = useState({});
@@ -45,7 +49,6 @@ const TableOrders = ({ orders, setOrders, getOrders }) => {
   };
 
   const handleDeleteOrder = async (id) => {
-    console.log(id);
     const token = localStorage.getItem("tokenApi");
 
     swal({
@@ -54,6 +57,8 @@ const TableOrders = ({ orders, setOrders, getOrders }) => {
       dangerMode: true,
     }).then(async (willDelete) => {
       if (willDelete) {
+        setLoading(true);
+
         await axios
           .delete(`${process.env.REACT_APP_BASE_URL}/api/orders/delete/${id}`, {
             headers: {
@@ -61,7 +66,8 @@ const TableOrders = ({ orders, setOrders, getOrders }) => {
             },
           })
           .then((response) => {
-            getOrders(page);
+            getOrders(pageActive);
+            setLoading(false);
             return swal({
               icon: "success",
               title: "Pedido deletado com sucesso",
@@ -71,6 +77,7 @@ const TableOrders = ({ orders, setOrders, getOrders }) => {
           })
           .catch((error) => {
             console.log(error);
+            setLoading(false);
             return swal({
               icon: "error",
               title: "Falha ao deletar pedido",
@@ -115,7 +122,7 @@ const TableOrders = ({ orders, setOrders, getOrders }) => {
                       <u>{order.client}</u>
                     </th>
                     <th>{order.seller.name}</th>
-                    <th>R${order.total.toFixed(2)}</th>
+                    <th>{numberToReal(order.total)}</th>
                     <th>
                       <BiSearchAlt
                         style={{ cursor: "pointer" }}
@@ -150,6 +157,7 @@ const TableOrders = ({ orders, setOrders, getOrders }) => {
         }}
         order={orderInfo}
       />
+      <ModalLoading show={loading} onHide={() => setLoading(false)} />
     </>
   );
 };

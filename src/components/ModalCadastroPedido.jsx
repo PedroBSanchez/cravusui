@@ -8,8 +8,10 @@ import { BsPlusSquareFill } from "react-icons/bs";
 
 import "./ModalCadastroPedido.css";
 import TableOrderItems from "./TableOrderItems";
+import ModalLoading from "./ModalLoading";
 
 const ModalCadastroPedido = (props) => {
+  const [loading, setLoading] = useState(false);
   const [newCity, setNewCity] = useState();
   const [newClient, setNewClient] = useState();
   const [newItems, setNewItems] = useState([]);
@@ -186,12 +188,14 @@ const ModalCadastroPedido = (props) => {
       },
     };
 
+    setLoading(true);
     await axios
       .request(options)
       .then((response) => {
         //Zerar valores
         zerarInputs();
         props.onHide();
+        setLoading(false);
         return swal({
           icon: "success",
           title: "Pedido criado com sucesso",
@@ -203,6 +207,7 @@ const ModalCadastroPedido = (props) => {
         console.log(error);
         zerarInputs();
         props.onHide();
+        setLoading(false);
         return swal({
           icon: "error",
           title: "Falha ao criar pedido",
@@ -230,106 +235,113 @@ const ModalCadastroPedido = (props) => {
   };
 
   return (
-    <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter">
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Cadastro de Pedido
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <div className="row">
-          <div className="col">
-            <Form.Label>Cidade</Form.Label>
-            <Form.Control
-              id="cidadeInput"
-              type="text"
-              placeholder=""
-              onChange={(e) => {
-                setNewCity(e.target.value);
-              }}
-            />
-          </div>
-          <div className="col">
-            <Form.Label>Cliente</Form.Label>
-            <Form.Control
-              id="clienteInput"
-              type="text"
-              placeholder=""
-              onChange={(e) => {
-                setNewClient(e.target.value);
-              }}
-            />
-          </div>
-        </div>
-        <div className="row mt-2 align-items-end">
-          <div className="col-md-6">
-            <Form.Label>Produto</Form.Label>
-            <Form.Control
-              id="produtoInput"
-              type="text"
-              placeholder=""
-              list="data"
-              onChange={(e) => {
-                handleOptionNewItem(e.target.value);
-              }}
-            />
-            <datalist id="data" style={{ width: "100%" }}>
-              {allItems.length > 0 &&
-                allItems.map((item, index) => {
-                  return (
-                    <option key={index}>
-                      {item.code} - {item.description} - R${item.value}
-                    </option>
-                  );
-                })}
-            </datalist>
-          </div>
-          <div className="col-md-2">
-            <Form.Label>Quantidade</Form.Label>
-            <Form.Control
-              id="quantidadeInput"
-              min={1}
-              type="number"
-              placeholder=""
-              onChange={(e) => setNewItemAmount(e.target.value)}
-            />
-          </div>
-          <div className="col-2">
-            <BsPlusSquareFill
-              className="add-item-icon"
-              size={37}
-              onClick={handleAddItem}
-            />
-          </div>
-        </div>
-        <hr />
-        <div className="row mt-2">
+    <>
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+      >
+        <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Itens do Pedido
+            Cadastro de Pedido
           </Modal.Title>
-          <div className="col">
-            <TableOrderItems
-              orderItems={newItems}
-              handleRemoveItem={handleRemoveItem}
-            />
+        </Modal.Header>
+        <Modal.Body>
+          <div className="row">
+            <div className="col">
+              <Form.Label>Cidade</Form.Label>
+              <Form.Control
+                id="cidadeInput"
+                type="text"
+                placeholder=""
+                onChange={(e) => {
+                  setNewCity(e.target.value);
+                }}
+              />
+            </div>
+            <div className="col">
+              <Form.Label>Cliente</Form.Label>
+              <Form.Control
+                id="clienteInput"
+                type="text"
+                placeholder=""
+                onChange={(e) => {
+                  setNewClient(e.target.value);
+                }}
+              />
+            </div>
           </div>
-        </div>
-        <div className="row mt-2">
-          <div className="col">
-            <p>
-              <u>
-                <b>Total R${orderPrice.toFixed(2)}</b>
-              </u>
-            </p>
+          <div className="row mt-2 align-items-end">
+            <div className="col-md-6">
+              <Form.Label>Produto</Form.Label>
+              <Form.Control
+                id="produtoInput"
+                type="text"
+                placeholder=""
+                list="data"
+                onChange={(e) => {
+                  handleOptionNewItem(e.target.value);
+                }}
+              />
+              <datalist id="data" style={{ width: "100%" }}>
+                {allItems.length > 0 &&
+                  allItems.map((item, index) => {
+                    return (
+                      <option key={index}>
+                        {item.code} - {item.description} - R${item.value}
+                      </option>
+                    );
+                  })}
+              </datalist>
+            </div>
+            <div className="col-md-2">
+              <Form.Label>Quantidade</Form.Label>
+              <Form.Control
+                id="quantidadeInput"
+                min={1}
+                type="number"
+                placeholder=""
+                onChange={(e) => setNewItemAmount(e.target.value)}
+              />
+            </div>
+            <div className="col-2">
+              <BsPlusSquareFill
+                className="add-item-icon"
+                size={37}
+                onClick={handleAddItem}
+              />
+            </div>
           </div>
-        </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="success" onClick={() => handleNewOrder()}>
-          Confirmar
-        </Button>
-      </Modal.Footer>
-    </Modal>
+          <hr />
+          <div className="row mt-2">
+            <Modal.Title id="contained-modal-title-vcenter">
+              Itens do Pedido
+            </Modal.Title>
+            <div className="col">
+              <TableOrderItems
+                orderItems={newItems}
+                handleRemoveItem={handleRemoveItem}
+              />
+            </div>
+          </div>
+          <div className="row mt-2">
+            <div className="col">
+              <p>
+                <u>
+                  <b>Total R${orderPrice.toFixed(2)}</b>
+                </u>
+              </p>
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="success" onClick={() => handleNewOrder()}>
+            Confirmar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <ModalLoading show={loading} onHide={() => setLoading(false)} />
+    </>
   );
 };
 

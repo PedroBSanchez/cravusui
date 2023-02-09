@@ -7,8 +7,12 @@ import { FaTrashAlt, FaPencilAlt } from "react-icons/fa";
 
 import "./TablePadrao.css";
 import ModalEditItem from "./ModalEditItem";
+import ModalLoading from "./ModalLoading";
+import { numberToReal } from "../utils/numberToReal";
 
 const TablePadrao = ({ items, setItems, getItems, search }) => {
+  const [loading, setLoading] = useState(false);
+
   const token = localStorage.getItem("tokenApi");
 
   const [modalEditShow, setModalEditshow] = useState(false);
@@ -40,6 +44,7 @@ const TablePadrao = ({ items, setItems, getItems, search }) => {
   }
 
   const handleDeleteItem = async (itemId) => {
+    setLoading(true);
     await axios
       .delete(`${process.env.REACT_APP_BASE_URL}/api/items/delete/${itemId}`, {
         headers: {
@@ -47,7 +52,8 @@ const TablePadrao = ({ items, setItems, getItems, search }) => {
         },
       })
       .then(async (response) => {
-        await getItems();
+        await getItems(search, pageActive);
+        setLoading(false);
         return swal({
           icon: "success",
           title: "Item deletado com sucesso",
@@ -57,6 +63,7 @@ const TablePadrao = ({ items, setItems, getItems, search }) => {
       })
       .catch((error) => {
         console.log(error);
+        setLoading(false);
         return swal({
           icon: "error",
           title: "Falha ao deletar item",
@@ -101,7 +108,7 @@ const TablePadrao = ({ items, setItems, getItems, search }) => {
                     <th>
                       <u>{item.code}</u>
                     </th>
-                    <th>R${item.value.toFixed(2)}</th>
+                    <th>{numberToReal(item.value)}</th>
                     <th>{item.amount}</th>
                     <th>
                       <FaPencilAlt
@@ -146,6 +153,7 @@ const TablePadrao = ({ items, setItems, getItems, search }) => {
         currentPage={page}
         currentSearch={search}
       />
+      <ModalLoading show={loading} onHide={() => setLoading(false)} />
     </>
   );
 };

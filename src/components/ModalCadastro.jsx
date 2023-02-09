@@ -5,7 +5,10 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import swal from "sweetalert";
 
+import ModalLoading from "./ModalLoading";
+
 const ModalCadastro = (props) => {
+  const [loading, setLoading] = useState(false);
   const [newDescription, setNewDescription] = useState("");
   const [newValue, setNewValue] = useState("");
   const [newAmount, setNewAmount] = useState("");
@@ -46,6 +49,7 @@ const ModalCadastro = (props) => {
       },
     };
 
+    setLoading(true);
     await axios
       .request(options)
       .then(async (response) => {
@@ -57,9 +61,12 @@ const ModalCadastro = (props) => {
         });
         zerarValores();
         props.onHide();
+
         await props.getItems();
+        setLoading(false);
       })
       .catch((error) => {
+        setLoading(false);
         return swal({
           icon: "error",
           title: "Falha ao cadastrar produto",
@@ -76,59 +83,63 @@ const ModalCadastro = (props) => {
   };
 
   return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Cadastro de Produto
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <div className="row">
-          <div className="col">
-            <Form.Label>Descrição</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder=""
-              onChange={(e) => {
-                setNewDescription(e.target.value);
-              }}
-            />
+    <>
+      {" "}
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Cadastro de Produto
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="row">
+            <div className="col">
+              <Form.Label>Descrição</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder=""
+                onChange={(e) => {
+                  setNewDescription(e.target.value);
+                }}
+              />
+            </div>
           </div>
-        </div>
-        <div className="row mt-2">
-          <div className="col-md-6 col-sm-5">
-            <Form.Label>Preço</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder=""
-              onChange={(e) => {
-                setNewValue(e.target.value);
-              }}
-            />
+          <div className="row mt-2">
+            <div className="col-md-6 col-sm-5">
+              <Form.Label>Preço</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder=""
+                onChange={(e) => {
+                  setNewValue(e.target.value);
+                }}
+              />
+            </div>
+            <div className="col-md-6 col-sm-5">
+              <Form.Label>Estoque</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder=""
+                onChange={(e) => {
+                  setNewAmount(e.target.value);
+                }}
+              />
+            </div>
           </div>
-          <div className="col-md-6 col-sm-5">
-            <Form.Label>Estoque</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder=""
-              onChange={(e) => {
-                setNewAmount(e.target.value);
-              }}
-            />
-          </div>
-        </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="success" onClick={() => handleNewItem()}>
-          Confirmar
-        </Button>
-      </Modal.Footer>
-    </Modal>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="success" onClick={() => handleNewItem()}>
+            Confirmar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <ModalLoading show={loading} onHide={() => setLoading(false)} />
+    </>
   );
 };
 

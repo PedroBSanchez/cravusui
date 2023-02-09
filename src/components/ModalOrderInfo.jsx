@@ -4,6 +4,7 @@ import "./ModalOrderInfo.css";
 
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { numberToReal } from "../utils/numberToReal";
 
 const ModalOrderInfo = (props) => {
   console.log(props.order);
@@ -68,7 +69,7 @@ const ModalOrderInfo = (props) => {
                         <td>
                           <u>{item?.code}</u>
                         </td>
-                        <td>R${item?.value.toFixed(2)}</td>
+                        <td>{numberToReal(item?.value)}</td>
                         <td>{item?.amount}</td>
                       </tr>
                     );
