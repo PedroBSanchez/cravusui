@@ -6,6 +6,7 @@ import NavbarPadrao from "../components/NavbarPadrao";
 import TablePadrao from "../components/TablePadrao";
 import "./Produtos.css";
 import ModalCadastro from "../components/ModalCadastro";
+import { numberToReal } from "../utils/numberToReal";
 
 const Produtos = () => {
   const [search, setSearch] = useState("");
@@ -13,8 +14,11 @@ const Produtos = () => {
   const [items, setItems] = useState([]);
   const [modalCadastroShow, setModalCadastroShow] = useState(false);
 
+  const [totalEstoque, setTotalEstoque] = useState(0);
+
   useEffect(() => {
     getItems();
+    getTotalEstoque();
   }, []);
 
   const getItems = async (description = "", pageParam = 1) => {
@@ -34,6 +38,23 @@ const Produtos = () => {
       })
       .catch((error) => {
         console.log(error.data);
+      });
+  };
+
+  const getTotalEstoque = async () => {
+    const token = localStorage.getItem("tokenApi");
+
+    await axios
+      .get(`${process.env.REACT_APP_BASE_URL}/api/items/totalvalue`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setTotalEstoque(response.data.total);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 
@@ -77,6 +98,11 @@ const Produtos = () => {
                 getItems(search);
               }}
             />
+          </div>
+          <div className="col-4">
+            <p className="total-estoque">
+              Total Estoque: <u>{numberToReal(totalEstoque)}</u>
+            </p>
           </div>
         </div>
         <div className="row mt-2">

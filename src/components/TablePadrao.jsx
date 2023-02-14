@@ -94,7 +94,7 @@ const TablePadrao = ({ items, setItems, getItems, search }) => {
               <th scope="col">Código</th>
               <th scope="col">Preço unitário</th>
               <th scope="col">Estoque (Und)</th>
-
+              <th scope="col">Total</th>
               <th scope="col">Ações</th>
             </tr>
           </thead>
@@ -110,6 +110,7 @@ const TablePadrao = ({ items, setItems, getItems, search }) => {
                     </th>
                     <th>{numberToReal(item.value)}</th>
                     <th>{item.amount}</th>
+                    <th>{numberToReal(item?.amount * item?.value)}</th>
                     <th>
                       <FaPencilAlt
                         style={{ cursor: "pointer" }}
