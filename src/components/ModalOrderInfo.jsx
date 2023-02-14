@@ -30,7 +30,7 @@ const ModalOrderInfo = (props) => {
             <h6>Vendedor: {props.order?.seller?.name}</h6>
           </div>
           <div className="col">
-            <h6>Cliente: {props.order?.client}</h6>
+            <h6>Cliente: {props.order?.client?.name}</h6>
             <h6>Código: {props.order?.code}</h6>
           </div>
         </div>

@@ -40,6 +40,17 @@ function NavbarPadrao() {
                 Pedidos
               </a>
             </li>
+            <li className="nav-item">
+              <a
+                className="nav-link navbar-link-ok"
+                style={{ color: "white" }}
+                onClick={() => {
+                  handleNavigate("clientes");
+                }}
+              >
+                Clientes
+              </a>
+            </li>
           </ul>
         </div>
       </div>

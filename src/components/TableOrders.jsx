@@ -119,7 +119,7 @@ const TableOrders = ({ orders, setOrders, getOrders }) => {
                     <th scope="row">{index + 1}</th>
                     <th>{order.city}</th>
                     <th>
-                      <u>{order.client}</u>
+                      <u>{order.client?.name}</u>
                     </th>
                     <th>{order.seller.name}</th>
                     <th>{numberToReal(order.total)}</th>
