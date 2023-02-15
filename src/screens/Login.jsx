@@ -7,6 +7,7 @@ import "./Login.css";
 
 const Login = () => {
   const navigate = useNavigate();
+
   const navigateHome = (userInfo) => {
     localStorage.clear();
     localStorage.setItem("tokenApi", userInfo.token);
