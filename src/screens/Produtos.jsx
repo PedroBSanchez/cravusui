@@ -7,8 +7,11 @@ import TablePadrao from "../components/TablePadrao";
 import "./Produtos.css";
 import ModalCadastro from "../components/ModalCadastro";
 import { numberToReal } from "../utils/numberToReal";
+import { verifyToken } from "../utils/verifyToken";
+import { useNavigate } from "react-router-dom";
 
 const Produtos = () => {
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
 
   const [items, setItems] = useState([]);
@@ -17,9 +20,18 @@ const Produtos = () => {
   const [totalEstoque, setTotalEstoque] = useState(0);
 
   useEffect(() => {
+    validateToken();
     getItems();
     getTotalEstoque();
   }, []);
+
+  const validateToken = async () => {
+    await verifyToken().then((validToken) => {
+      if (!validToken) {
+        navigate("/");
+      }
+    });
+  };
 
   const getItems = async (description = "", pageParam = 1) => {
     const token = localStorage.getItem("tokenApi");

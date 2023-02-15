@@ -6,8 +6,11 @@ import "./Pedidos.css";
 import ModalCadastroPedido from "../components/ModalCadastroPedido";
 import axios from "axios";
 import TableOrders from "../components/TableOrders";
+import { verifyToken } from "../utils/verifyToken";
+import { useNavigate } from "react-router-dom";
 
 const Pedidos = () => {
+  const navigate = useNavigate();
   const [modalCadastroShow, setModalCadastroShow] = useState(false);
 
   const [citySearch, setCitySearch] = useState("");
@@ -16,8 +19,17 @@ const Pedidos = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
+    validateToken();
     getOrders();
   }, []);
+
+  const validateToken = async () => {
+    await verifyToken().then((validToken) => {
+      if (!validToken) {
+        navigate("/");
+      }
+    });
+  };
 
   const getOrders = async (pageParam = 1) => {
     const token = localStorage.getItem("tokenApi");

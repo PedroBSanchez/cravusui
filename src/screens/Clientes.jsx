@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import ModalLoading from "../components/ModalLoading";
 import NavbarPadrao from "../components/NavbarPadrao";
@@ -8,6 +9,7 @@ import swal from "sweetalert";
 import { FaTrashAlt } from "react-icons/fa";
 
 import "./Clients.css";
+import { verifyToken } from "../utils/verifyToken";
 
 const ModalCadastroCliente = (props) => {
   const [loading, setLoading] = useState(false);
@@ -163,6 +165,7 @@ const ModalCadastroCliente = (props) => {
 };
 
 const Clientes = () => {
+  const navigate = useNavigate();
   const [modalCadastroClient, setModalCadastroCliente] = useState(false);
 
   const [clients, setClients] = useState([]);
@@ -215,9 +218,17 @@ const Clientes = () => {
   };
 
   useEffect(() => {
+    validateToken();
     getClients();
   }, []);
 
+  const validateToken = async () => {
+    await verifyToken().then((validToken) => {
+      if (!validToken) {
+        navigate("/");
+      }
+    });
+  };
   return (
     <>
       <NavbarPadrao />
