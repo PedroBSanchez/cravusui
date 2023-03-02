@@ -3,4 +3,13 @@
   border: 2px solid black;
   border-radius: 15px;
   width: 70%;
+  transition: 0.5s;
+  box-shadow: 2px 2px 2px gray;
+}
+
+.card-venda-mes:hover {
+  transition: 0.5s;
+  background-color: rgb(14, 206, 14);
+  cursor: pointer;
+  box-shadow: 10px 10px 10px gray;
 }
