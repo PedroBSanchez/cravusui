@@ -13,10 +13,10 @@ function NavbarPadrao() {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg bg-dark">
+    <nav className="navbar navbar-expand-sm bg-dark">
       <div className="container-fluid">
         <img src={sewingMachineImage} alt="Bootstrap" width="35" height="35" />
-        <div className="collapse navbar-collapse" id="navbarNav">
+        <div className="navbar-collapse" id="navbarNav">
           <ul className="navbar-nav p-2">
             <li className="nav-item">
               <a

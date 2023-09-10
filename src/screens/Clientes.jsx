@@ -251,10 +251,10 @@ const Clientes = () => {
         </div>
         <hr />
         <div className="row text-center justify-content-center">
-          <div className="col-6">
+          <div className="col-md-6 col-sm-12">
             {" "}
             <table
-              className="table table-warning table-striped"
+              className="table table-warning table-striped table-responsive"
               style={{ borderRadius: 15 }}
             >
               <thead>
