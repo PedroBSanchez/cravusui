@@ -5,10 +5,11 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import swal from "sweetalert";
 
+import "./ModalEditItem.css";
+
 const ModalEditItem = (props) => {
   const [newDescription, setNewDescription] = useState("");
   const [newValue, setNewValue] = useState("");
-  const [newAmount, setNewAmount] = useState("");
 
   const handleEditItem = async () => {
     const descriptionEdit =
@@ -17,8 +18,6 @@ const ModalEditItem = (props) => {
         : props.descriptionPlaceholder;
     const valueEdit =
       newValue && newValue != "" ? newValue : props.valuePlaceholder;
-    const amountEdit =
-      newAmount && newAmount != "" ? newAmount : props.amountPlaceholder;
 
     const token = localStorage.getItem("tokenApi");
     const options = {
@@ -32,7 +31,7 @@ const ModalEditItem = (props) => {
         id: props.idEdit,
         description: descriptionEdit,
         value: valueEdit,
-        amount: amountEdit,
+        isActive: props.isActivePlaceholder,
       },
     };
 
@@ -101,15 +100,22 @@ const ModalEditItem = (props) => {
             />
           </div>
           <div className="col-md-6 col-sm-5">
-            <Form.Label>Estoque</Form.Label>
-            <Form.Control
-              type="number"
-              min={0}
-              placeholder={props.amountPlaceholder}
-              onChange={(e) => {
-                setNewAmount(e.target.value);
-              }}
-            />
+            <label>{props.isActivePlaceholder ? "Ativo" : "Inativo"}</label>
+            <div class="bauble_box">
+              <input
+                class="bauble_input"
+                id="bauble_check"
+                name="bauble"
+                type="checkbox"
+                checked={props.isActivePlaceholder}
+                onChange={() => {
+                  props.setIsActivePlaceholder(!props.isActivePlaceholder);
+                }}
+              />
+              <label class="bauble_label" for="bauble_check">
+                Toggle
+              </label>
+            </div>
           </div>
         </div>
       </Modal.Body>

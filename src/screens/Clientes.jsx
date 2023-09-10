@@ -234,7 +234,7 @@ const Clientes = () => {
       <NavbarPadrao />
       <div className="container-fluid">
         <div className="row text-center mt-4">
-          <div className="col-2">
+          <div className="col-md-2 col-sm-4">
             <h1 className="page-title">Clientes</h1>
           </div>
           <div className="col-1">

@@ -3,22 +3,31 @@ import axios from "axios";
 import swal from "sweetalert";
 import Pagination from "react-bootstrap/Pagination";
 
-import { FaTrashAlt, FaPencilAlt } from "react-icons/fa";
+import { FaTrashAlt, FaPencilAlt, FaBox } from "react-icons/fa";
 
 import "./TablePadrao.css";
 import ModalEditItem from "./ModalEditItem";
 import ModalLoading from "./ModalLoading";
 import { numberToReal } from "../utils/numberToReal";
+import ModalEditAmountItem from "./ModalEditAmountItem";
 
-const TablePadrao = ({ items, setItems, getItems, search }) => {
+const TablePadrao = ({
+  items,
+  setItems,
+  getItems,
+  search,
+  getTotalEstoque,
+}) => {
   const [loading, setLoading] = useState(false);
 
   const token = localStorage.getItem("tokenApi");
 
   const [modalEditShow, setModalEditshow] = useState(false);
+  const [modalEditAmountShow, setModalEditAmountShow] = useState(false);
   const [descriptionPlaceholder, setDescriptionPlaceholder] = useState("");
   const [valuePlaceholder, setValuePlaceholder] = useState("");
   const [amountPlaceholder, setAmountPlaceholder] = useState("");
+  const [isActivePlaceholder, setIsActivePlaceholder] = useState(true);
   const [idEdit, setIdEdit] = useState();
   const [pageActive, setPageActive] = useState(1);
 
@@ -44,33 +53,42 @@ const TablePadrao = ({ items, setItems, getItems, search }) => {
   }
 
   const handleDeleteItem = async (itemId) => {
-    setLoading(true);
-    await axios
-      .delete(`${process.env.REACT_APP_BASE_URL}/api/items/delete/${itemId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(async (response) => {
-        await getItems(search, pageActive);
-        setLoading(false);
-        return swal({
-          icon: "success",
-          title: "Item deletado com sucesso",
-          showConfirmButton: false,
-          timer: 2500,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-        return swal({
-          icon: "error",
-          title: "Falha ao deletar item",
-          showConfirmButton: false,
-          timer: 2500,
-        });
-      });
+    swal({
+      title: "Deseja Realmente Remover o item?",
+    }).then(async (result) => {
+      if (result) {
+        setLoading(true);
+        await axios
+          .delete(
+            `${process.env.REACT_APP_BASE_URL}/api/items/delete/${itemId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
+          .then(async (response) => {
+            await getItems(search, pageActive);
+            setLoading(false);
+            return swal({
+              icon: "success",
+              title: "Item deletado com sucesso",
+              showConfirmButton: false,
+              timer: 2500,
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+            setLoading(false);
+            return swal({
+              icon: "error",
+              title: "Falha ao deletar item",
+              showConfirmButton: false,
+              timer: 2500,
+            });
+          });
+      }
+    });
   };
 
   const handlePageChange = (pageNumber) => {
@@ -82,7 +100,7 @@ const TablePadrao = ({ items, setItems, getItems, search }) => {
 
   return (
     <>
-      <div className="table-container p-2">
+      <div className="table-container table-responsive p-2">
         <table
           className="table table-warning table-striped"
           style={{ borderRadius: 15 }}
@@ -112,6 +130,20 @@ const TablePadrao = ({ items, setItems, getItems, search }) => {
                     <th>{item.amount}</th>
                     <th>{numberToReal(item?.amount * item?.value)}</th>
                     <th>
+                      <FaBox
+                        style={{
+                          cursor: "pointer",
+                          marginRight: "5px",
+                          color: "rgb(34, 94, 204)",
+                        }}
+                        onClick={() => {
+                          setDescriptionPlaceholder(item.description);
+                          setAmountPlaceholder(item.amount);
+                          setValuePlaceholder(item.value.toFixed(2));
+                          setIdEdit(item._id);
+                          setModalEditAmountShow(true);
+                        }}
+                      />
                       <FaPencilAlt
                         style={{ cursor: "pointer" }}
                         onClick={() => {
@@ -120,11 +152,12 @@ const TablePadrao = ({ items, setItems, getItems, search }) => {
                           setValuePlaceholder(item.value.toFixed(2));
                           setIdEdit(item._id);
                           setModalEditshow(true);
+                          setIsActivePlaceholder(item.isActive);
                         }}
-                      />{" "}
+                      />
                       <FaTrashAlt
                         color="#eb6767"
-                        style={{ cursor: "pointer" }}
+                        style={{ cursor: "pointer", marginLeft: "5px" }}
                         onClick={() => {
                           handleDeleteItem(item._id);
                         }}
@@ -146,8 +179,22 @@ const TablePadrao = ({ items, setItems, getItems, search }) => {
         onHide={() => setModalEditshow(false)}
         show={modalEditShow}
         descriptionPlaceholder={descriptionPlaceholder}
-        amountPlaceholder={amountPlaceholder}
         valuePlaceholder={valuePlaceholder}
+        isActivePlaceholder={isActivePlaceholder}
+        setIsActivePlaceholder={setIsActivePlaceholder}
+        idEdit={idEdit}
+        setIdEdit={setIdEdit}
+        getItems={getItems}
+        currentPage={page}
+        currentSearch={search}
+      />
+      <ModalEditAmountItem
+        show={modalEditAmountShow}
+        onHide={() => {
+          setModalEditAmountShow(false);
+        }}
+        descriptionPlaceholder={descriptionPlaceholder}
+        amountPlaceholder={amountPlaceholder}
         idEdit={idEdit}
         setIdEdit={setIdEdit}
         getItems={getItems}
