@@ -38,6 +38,10 @@ const ModalCadastroCh = (props) => {
         if (response.status == 200) {
           swal({ title: "Cheque Cadastrado com sucesso", icon: "success" });
           props.getChs(props.pageActive);
+          setNewClient("");
+          setNewDepositDate(null);
+          setNewValue(null);
+          props.onHide();
         } else {
           swal({ title: "Falha ao cadastrar cheque", icon: "error" });
         }
