@@ -161,6 +161,7 @@ const Cheques = ({ isOpen }) => {
             size={30}
             style={{ cursor: "pointer" }}
             onClick={() => {
+              setPageActive(1);
               getChs(1);
             }}
           />
