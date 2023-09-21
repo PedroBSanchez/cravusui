@@ -1,0 +1,12 @@
+.section-list-element {
+  cursor: pointer;
+  color: black;
+}
+
+.section-list-element:hover {
+  color: gray;
+}
+
+.section-list-element-active {
+  color: blue;
+}

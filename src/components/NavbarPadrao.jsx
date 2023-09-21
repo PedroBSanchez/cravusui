@@ -62,6 +62,17 @@ function NavbarPadrao() {
                 Vendas
               </a>
             </li>
+            <li className="nav-item">
+              <a
+                className="nav-link navbar-link-ok"
+                style={{ color: "white" }}
+                onClick={() => {
+                  handleNavigate("financeiro");
+                }}
+              >
+                Financeiro
+              </a>
+            </li>
           </ul>
         </div>
       </div>

@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import NavbarPadrao from "../components/NavbarPadrao";
 import { BiSearchAlt } from "react-icons/bi";
 
+import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 import "./Pedidos.css";
 import ModalCadastroPedido from "../components/ModalCadastroPedido";
 import axios from "axios";
@@ -17,6 +20,12 @@ const Pedidos = () => {
   const [clientSearch, setClientSearch] = useState("");
 
   const [orders, setOrders] = useState([]);
+
+  const startMonth = new Date();
+  startMonth.setDate(1);
+  startMonth.setHours(0, 0, 0, 0);
+  const [startDate, setStartDate] = useState(startMonth);
+  const [endDate, setEndDate] = useState(new Date());
 
   useEffect(() => {
     validateToken();
@@ -36,7 +45,9 @@ const Pedidos = () => {
 
     await axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/api/orders/paginate/?page=${pageParam}&city=${citySearch}&client=${clientSearch}`,
+        `${
+          process.env.REACT_APP_BASE_URL
+        }/api/orders/paginate/?page=${pageParam}&city=${citySearch}&client=${clientSearch}&startdate=${startDate.toISOString()}&enddate=${endDate.toISOString()}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -71,7 +82,7 @@ const Pedidos = () => {
         </div>
         <hr />
         <div className="row align-items-baseline">
-          <div className="offset-md-1 col-md-2">
+          <div className="offset-md-1 col-md-2 mt-1">
             <input
               type="text"
               className="form-control"
@@ -79,12 +90,29 @@ const Pedidos = () => {
               onChange={(e) => setCitySearch(e.target.value)}
             />
           </div>
-          <div className="col-md-2">
+          <div className="col-md-2 mt-1">
             <input
               type="text"
               className="form-control"
               placeholder="Cliente"
               onChange={(e) => setClientSearch(e.target.value)}
+            />
+          </div>
+          <div className="col-md-2">
+            <ReactDatePicker
+              className="form-control mt-1"
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              dateFormat={"dd/MM/yyyy"}
+            />
+          </div>
+
+          <div className="col-md-2">
+            <ReactDatePicker
+              className="form-control mt-1"
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+              dateFormat={"dd/MM/yyyy"}
             />
           </div>
           <div className="col-md-2 col-sm-1">
