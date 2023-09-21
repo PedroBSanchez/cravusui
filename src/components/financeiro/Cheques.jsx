@@ -146,8 +146,9 @@ const Cheques = ({ isOpen }) => {
           <ReactDatePicker
             className="m-2 form-control"
             selected={endDate}
-            onChange={(date) => setStartDate(date)}
+            onChange={(date) => setEndDate(date)}
             dateFormat={"dd/MM/yyyy"}
+            popperPlacement="right"
           />
         </div>
 
