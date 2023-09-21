@@ -82,6 +82,7 @@ const Cheques = ({ isOpen }) => {
       .then(async (response) => {
         setLoading(false);
         setChs(response.data);
+        setTotalValue(response.data.totalValue);
       })
       .catch((error) => {
         setLoading(false);
@@ -201,7 +202,7 @@ const Cheques = ({ isOpen }) => {
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td>{ch.client}</td>
-                        <td>{ch.value}</td>
+                        <td>{numberToReal(ch.value)}</td>
                         <td>{new Date(ch.depositDate).toLocaleDateString()}</td>
                         <td>
                           <FaTrashAlt
