@@ -17,11 +17,14 @@ const Cheques = ({ isOpen }) => {
   const [loading, setLoading] = useState(false);
   const [showModalCadastro, setShowModalCadastro] = useState(false);
 
+  const now = new Date();
   const startMonth = new Date();
   startMonth.setDate(1);
   startMonth.setHours(0, 0, 0, 0);
+  const endMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
   const [startDate, setStartDate] = useState(startMonth);
-  const [endDate, setEndDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(endMonth);
   const [totalValue, setTotalValue] = useState(0);
 
   const [chs, setChs] = useState([]);
