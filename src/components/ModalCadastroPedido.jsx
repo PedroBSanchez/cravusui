@@ -74,7 +74,6 @@ const ModalCadastroPedido = (props) => {
 
   const handleAddItem = () => {
     let produtoJaAdicionado = false;
-    console.log(newItemCode);
     if (
       !newItemCode ||
       !newItemDescription ||
@@ -225,6 +224,7 @@ const ModalCadastroPedido = (props) => {
         //Zerar valores
         zerarInputs();
         props.onHide();
+        props.getOrders();
         setLoading(false);
         return swal({
           icon: "success",

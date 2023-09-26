@@ -136,6 +136,7 @@ const Pedidos = () => {
       <ModalCadastroPedido
         show={modalCadastroShow}
         onHide={() => setModalCadastroShow(false)}
+        getOrders={getOrders}
       />
     </>
   );
