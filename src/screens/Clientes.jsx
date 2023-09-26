@@ -7,7 +7,7 @@ import NavbarPadrao from "../components/NavbarPadrao";
 import axios from "axios";
 import swal from "sweetalert";
 import { FaTrashAlt } from "react-icons/fa";
-
+import { BiSearchAlt } from "react-icons/bi";
 import "./Clients.css";
 import { verifyToken } from "../utils/verifyToken";
 
@@ -165,6 +165,7 @@ const ModalCadastroCliente = (props) => {
 };
 
 const Clientes = () => {
+  const [clientName, setClientName] = useState("");
   const navigate = useNavigate();
   const [modalCadastroClient, setModalCadastroCliente] = useState(false);
 
@@ -176,11 +177,14 @@ const Clientes = () => {
     const token = localStorage.getItem("tokenApi");
 
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/api/clients/getall`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/api/clients/getall?client=${clientName}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((response) => {
         setClients(response.data);
       })
@@ -250,7 +254,28 @@ const Clientes = () => {
           </div>
         </div>
         <hr />
-        <div className="row text-center justify-content-center">
+        <div className="row">
+          <div className="offset-md-3 col-md-3 col-6">
+            <input
+              className="form-control"
+              placeholder="Cliente"
+              value={clientName}
+              onChange={(e) => {
+                setClientName(e.target.value);
+              }}
+            />
+          </div>
+          <div className="col-1">
+            <BiSearchAlt
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                getClients();
+              }}
+              size={30}
+            />
+          </div>
+        </div>
+        <div className="row text-center justify-content-center mt-3">
           <div className="col-md-6 col-sm-12">
             {" "}
             <table
