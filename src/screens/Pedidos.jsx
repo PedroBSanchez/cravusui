@@ -16,6 +16,8 @@ const Pedidos = () => {
   const navigate = useNavigate();
   const [modalCadastroShow, setModalCadastroShow] = useState(false);
 
+  const [pageActive, setPageActive] = useState(1);
+
   const [citySearch, setCitySearch] = useState("");
   const [clientSearch, setClientSearch] = useState("");
 
@@ -119,7 +121,10 @@ const Pedidos = () => {
             <BiSearchAlt
               size={30}
               style={{ cursor: "pointer" }}
-              onClick={getOrders}
+              onClick={() => {
+                setPageActive(1);
+                getOrders(1);
+              }}
             />
           </div>
         </div>
@@ -129,6 +134,8 @@ const Pedidos = () => {
               orders={orders}
               setOrders={setOrders}
               getOrders={getOrders}
+              pageActive={pageActive}
+              setPageActive={setPageActive}
             />
           </div>
         </div>

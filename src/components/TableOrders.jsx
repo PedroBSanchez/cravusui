@@ -11,14 +11,18 @@ import ModalOrderInfo from "./ModalOrderInfo";
 import ModalLoading from "./ModalLoading";
 import { numberToReal } from "../utils/numberToReal";
 
-const TableOrders = ({ orders, setOrders, getOrders }) => {
+const TableOrders = ({
+  orders,
+  setOrders,
+  getOrders,
+  pageActive,
+  setPageActive,
+}) => {
   const [loading, setLoading] = useState(false);
 
   const [modalInfoShow, setModalInfoShow] = useState(false);
 
   const [orderInfo, setOrderInfo] = useState({});
-
-  const [pageActive, setPageActive] = useState(1);
 
   let page = 1;
 
